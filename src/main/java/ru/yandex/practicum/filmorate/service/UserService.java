@@ -1,8 +1,10 @@
 package ru.yandex.practicum.filmorate.service;
 
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,12 +19,14 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        validateUser(user);
         user.setId(currentId++);
         users.add(user);
         return user;
     }
 
     public User updateUser(User user) {
+        validateUser(user);
         Optional<User> existingUser = users.stream().filter(u -> u.getId().equals(user.getId())).findFirst();
         if (existingUser.isPresent()) {
             User updatedUser = existingUser.get();
@@ -33,6 +37,12 @@ public class UserService {
             return updatedUser;
         } else {
             throw new IllegalArgumentException("User not found");
+        }
+    }
+
+    private void validateUser(User user) {
+        if (user.getBirthday().isAfter(LocalDate.now())) {
+            throw new ValidationException("Дата рождения не может быть в будущем");
         }
     }
 }
