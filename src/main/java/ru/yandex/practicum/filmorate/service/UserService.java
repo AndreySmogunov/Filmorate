@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -19,5 +20,19 @@ public class UserService {
         user.setId(currentId++);
         users.add(user);
         return user;
+    }
+
+    public User updateUser(User user) {
+        Optional<User> existingUser = users.stream().filter(u -> u.getId().equals(user.getId())).findFirst();
+        if (existingUser.isPresent()) {
+            User updatedUser = existingUser.get();
+            updatedUser.setEmail(user.getEmail());
+            updatedUser.setLogin(user.getLogin());
+            updatedUser.setName(user.getName());
+            updatedUser.setBirthday(user.getBirthday());
+            return updatedUser;
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
     }
 }

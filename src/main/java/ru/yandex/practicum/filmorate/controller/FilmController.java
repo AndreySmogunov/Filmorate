@@ -23,4 +23,9 @@ public class FilmController {
     public Film createFilm(@RequestBody Film film) {
         return filmService.createFilm(film);
     }
+
+    @PutMapping
+    public Film updateFilm(@RequestBody Film film) {
+        return filmService.updateFilm(film);
+    }
 }
