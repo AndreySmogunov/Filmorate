@@ -9,7 +9,7 @@ public class User {
     private Long id;
 
     @NotBlank(message = "Электронная почта не может быть пустой")
-    @Email(message = "Электронная почта должна содержать символ @")
+    @Email(message = "Электронная почта должна быть корректной")
     private String email;
 
     @NotBlank(message = "Логин не может быть пустым")
