@@ -1,24 +1,27 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
+import lombok.AccessLevel;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
-    private Long id;
+    Long id;
 
     @NotBlank(message = "Электронная почта не может быть пустой")
     @Email(message = "Электронная почта должна быть корректной")
-    private String email;
+    String email;
 
     @NotBlank(message = "Логин не может быть пустым")
     @Pattern(regexp = "^\\S+$", message = "Логин не может содержать пробелы")
-    private String login;
+    String login;
 
-    private String name;
+    String name;
 
     @Past(message = "Дата рождения не может быть в будущем")
     @NotNull(message = "Дата рождения не может быть пустой")
-    private LocalDate birthday;
+    LocalDate birthday;
 }
