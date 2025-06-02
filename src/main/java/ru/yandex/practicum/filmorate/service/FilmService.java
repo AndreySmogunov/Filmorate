@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class FilmService {
     private List<Film> films = new ArrayList<>();
     private long currentId = 1;
@@ -22,6 +24,7 @@ public class FilmService {
         validateFilm(film);
         film.setId(currentId++);
         films.add(film);
+        log.info("Film created: {}", film);
         return film;
     }
 
@@ -34,14 +37,17 @@ public class FilmService {
             updatedFilm.setDescription(film.getDescription());
             updatedFilm.setReleaseDate(film.getReleaseDate());
             updatedFilm.setDuration(film.getDuration());
+            log.info("Film updated: {}", updatedFilm);
             return updatedFilm;
         } else {
+            log.error("Film not found with id: {}", film.getId());
             throw new IllegalArgumentException("Film not found");
         }
     }
 
     private void validateFilm(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            log.error("Validation failed for film: {}", film);
             throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
         }
     }
