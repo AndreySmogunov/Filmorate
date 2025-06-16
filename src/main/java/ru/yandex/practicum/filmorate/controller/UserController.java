@@ -18,6 +18,9 @@ import java.util.List;
 public class UserController {
 
     final UserService userService;
+    static final String USER_ID_PATH = "/{id}";
+    static final String FRIEND_PATH = "/friends/{friendId}";
+    static final String COMMON_FRIENDS_PATH = "/friends/common/{otherId}";
 
     @Autowired
     public UserController(UserService userService) {
@@ -29,7 +32,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(USER_ID_PATH)
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
         if (user != null) {
@@ -49,24 +52,24 @@ public class UserController {
         return userService.updateUser(user);
     }
 
-    @PutMapping("/{id}/friends/{friendId}")
+    @PutMapping(USER_ID_PATH + FRIEND_PATH)
     public ResponseEntity<Void> addFriend(@PathVariable Long id, @PathVariable Long friendId) {
         userService.addFriend(id, friendId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}/friends/{friendId}")
+    @DeleteMapping(USER_ID_PATH + FRIEND_PATH)
     public ResponseEntity<Void> removeFriend(@PathVariable Long id, @PathVariable Long friendId) {
         userService.removeFriend(id, friendId);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/friends")
+    @GetMapping(USER_ID_PATH + "/friends")
     public List<User> getFriends(@PathVariable Long id) {
         return userService.getFriends(id);
     }
 
-    @GetMapping("/{id}/friends/common/{otherId}")
+    @GetMapping(USER_ID_PATH + COMMON_FRIENDS_PATH)
     public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
         return userService.getCommonFriends(id, otherId);
     }

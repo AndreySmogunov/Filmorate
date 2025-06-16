@@ -18,6 +18,8 @@ import java.util.List;
 public class FilmController {
 
     final FilmService filmService;
+    static final String FILM_ID_PATH = "/{id}";
+    static final String LIKE_PATH = "/like/{userId}";
 
     @Autowired
     public FilmController(FilmService filmService) {
@@ -29,7 +31,7 @@ public class FilmController {
         return filmService.getAllFilms();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(FILM_ID_PATH)
     public ResponseEntity<Film> getFilmById(@PathVariable Long id) {
         Film film = filmService.getFilmById(id);
         if (film != null) {
@@ -49,13 +51,13 @@ public class FilmController {
         return filmService.updateFilm(film);
     }
 
-    @PutMapping("/{id}/like/{userId}")
+    @PutMapping(FILM_ID_PATH + LIKE_PATH)
     public ResponseEntity<Void> addLike(@PathVariable Long id, @PathVariable Long userId) {
         filmService.addLike(id, userId);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
+    @DeleteMapping(FILM_ID_PATH + LIKE_PATH)
     public ResponseEntity<Void> removeLike(@PathVariable Long id, @PathVariable Long userId) {
         filmService.removeLike(id, userId);
         return ResponseEntity.ok().build();
