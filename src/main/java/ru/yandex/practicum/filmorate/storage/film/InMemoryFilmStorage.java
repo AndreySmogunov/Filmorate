@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
@@ -47,5 +48,29 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film getFilmById(Long id) {
         return films.stream().filter(film -> film.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    @Override
+    public void addLike(Long filmId, Long userId) {
+        Film film = getFilmById(filmId);
+        if (film != null) {
+            film.getLikes().add(userId);
+        }
+    }
+
+    @Override
+    public void removeLike(Long filmId, Long userId) {
+        Film film = getFilmById(filmId);
+        if (film != null) {
+            film.getLikes().remove(userId);
+        }
+    }
+
+    @Override
+    public List<Film> getTopFilms(int count) {
+        return films.stream()
+                .sorted((f1, f2) -> Integer.compare(f2.getLikes().size(), f1.getLikes().size()))
+                .limit(count)
+                .collect(Collectors.toList());
     }
 }

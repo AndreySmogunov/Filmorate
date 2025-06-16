@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.user;
 
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -39,6 +39,24 @@ public class UserService {
         User updatedUser = userStorage.updateUser(user);
         log.info("User updated: {}", updatedUser);
         return updatedUser;
+    }
+
+    public void addFriend(Long userId, Long friendId) {
+        userStorage.addFriend(userId, friendId);
+        log.info("User {} added friend {}", userId, friendId);
+    }
+
+    public void removeFriend(Long userId, Long friendId) {
+        userStorage.removeFriend(userId, friendId);
+        log.info("User {} removed friend {}", userId, friendId);
+    }
+
+    public List<User> getFriends(Long userId) {
+        return userStorage.getFriends(userId);
+    }
+
+    public List<User> getCommonFriends(Long userId, Long otherUserId) {
+        return userStorage.getCommonFriends(userId, otherUserId);
     }
 
     private void validateUser(User user) {

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
@@ -47,5 +48,47 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User getUserById(Long id) {
         return users.stream().filter(user -> user.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    @Override
+    public void addFriend(Long userId, Long friendId) {
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
+        if (user != null && friend != null) {
+            user.getFriends().add(friendId);
+            friend.getFriends().add(userId);
+        }
+    }
+
+    @Override
+    public void removeFriend(Long userId, Long friendId) {
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
+        if (user != null && friend != null) {
+            user.getFriends().remove(friendId);
+            friend.getFriends().remove(userId);
+        }
+    }
+
+    @Override
+    public List<User> getFriends(Long userId) {
+        User user = getUserById(userId);
+        if (user != null) {
+            return user.getFriends().stream().map(this::getUserById).collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<User> getCommonFriends(Long userId, Long otherUserId) {
+        User user = getUserById(userId);
+        User otherUser = getUserById(otherUserId);
+        if (user != null && otherUser != null) {
+            return user.getFriends().stream()
+                    .filter(otherUser.getFriends()::contains)
+                    .map(this::getUserById)
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 }

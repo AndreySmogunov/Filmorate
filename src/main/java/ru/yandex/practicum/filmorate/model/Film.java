@@ -5,6 +5,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.AccessLevel;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -23,4 +25,6 @@ public class Film {
 
     @Positive(message = "Продолжительность фильма должна быть положительным числом")
     int duration;
+
+    Set<Long> likes = new HashSet<>();
 }

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.film;
 
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -39,6 +39,20 @@ public class FilmService {
         Film updatedFilm = filmStorage.updateFilm(film);
         log.info("Film updated: {}", updatedFilm);
         return updatedFilm;
+    }
+
+    public void addLike(Long filmId, Long userId) {
+        filmStorage.addLike(filmId, userId);
+        log.info("User {} added like to film {}", userId, filmId);
+    }
+
+    public void removeLike(Long filmId, Long userId) {
+        filmStorage.removeLike(filmId, userId);
+        log.info("User {} removed like from film {}", userId, filmId);
+    }
+
+    public List<Film> getTopFilms(int count) {
+        return filmStorage.getTopFilms(count);
     }
 
     private void validateFilm(Film film) {
