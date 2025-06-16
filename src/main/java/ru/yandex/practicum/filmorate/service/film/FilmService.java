@@ -24,18 +24,22 @@ public class FilmService {
     }
 
     public List<Film> getAllFilms() {
+        log.debug("Fetching all films");
         return filmStorage.getAllFilms();
     }
 
     public Film getFilmById(Long id) {
+        log.debug("Fetching film with id: {}", id);
         Film film = filmStorage.getFilmById(id);
         if (film == null) {
+            log.error("Film not found with id: {}", id);
             throw new IllegalArgumentException("Film not found");
         }
         return film;
     }
 
     public Film createFilm(Film film) {
+        log.debug("Creating film: {}", film);
         validateFilm(film);
         Film createdFilm = filmStorage.createFilm(film);
         log.info("Film created: {}", createdFilm);
@@ -43,6 +47,7 @@ public class FilmService {
     }
 
     public Film updateFilm(Film film) {
+        log.debug("Updating film: {}", film);
         validateFilm(film);
         Film updatedFilm = filmStorage.updateFilm(film);
         log.info("Film updated: {}", updatedFilm);
@@ -50,16 +55,19 @@ public class FilmService {
     }
 
     public void addLike(Long filmId, Long userId) {
+        log.debug("User {} adding like to film {}", userId, filmId);
         filmStorage.addLike(filmId, userId);
         log.info("User {} added like to film {}", userId, filmId);
     }
 
     public void removeLike(Long filmId, Long userId) {
+        log.debug("User {} removing like from film {}", userId, filmId);
         filmStorage.removeLike(filmId, userId);
         log.info("User {} removed like from film {}", userId, filmId);
     }
 
     public List<Film> getTopFilms(int count) {
+        log.debug("Fetching top {} films", count);
         return filmStorage.getTopFilms(count);
     }
 
