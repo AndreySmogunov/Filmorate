@@ -2,47 +2,43 @@ package ru.yandex.practicum.filmorate.service;
 
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.FieldDefaults;
+import lombok.AccessLevel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserService {
-    private List<User> users = new ArrayList<>();
-    private long currentId = 1;
+    final UserStorage userStorage;
+
+    @Autowired
+    public UserService(UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
 
     public List<User> getAllUsers() {
-        return users;
+        return userStorage.getAllUsers();
     }
 
     public User createUser(User user) {
         validateUser(user);
-        user.setId(currentId++);
-        users.add(user);
-        log.info("User created: {}", user);
-        return user;
+        User createdUser = userStorage.createUser(user);
+        log.info("User created: {}", createdUser);
+        return createdUser;
     }
 
     public User updateUser(User user) {
         validateUser(user);
-        Optional<User> existingUser = users.stream().filter(u -> u.getId().equals(user.getId())).findFirst();
-        if (existingUser.isPresent()) {
-            User updatedUser = existingUser.get();
-            updatedUser.setEmail(user.getEmail());
-            updatedUser.setLogin(user.getLogin());
-            updatedUser.setName(user.getName());
-            updatedUser.setBirthday(user.getBirthday());
-            log.info("User updated: {}", updatedUser);
-            return updatedUser;
-        } else {
-            log.error("User not found with id: {}", user.getId());
-            throw new IllegalArgumentException("User not found");
-        }
+        User updatedUser = userStorage.updateUser(user);
+        log.info("User updated: {}", updatedUser);
+        return updatedUser;
     }
 
     private void validateUser(User user) {

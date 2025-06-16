@@ -2,47 +2,43 @@ package ru.yandex.practicum.filmorate.service;
 
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.FieldDefaults;
+import lombok.AccessLevel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class FilmService {
-    private List<Film> films = new ArrayList<>();
-    private long currentId = 1;
+    final FilmStorage filmStorage;
+
+    @Autowired
+    public FilmService(FilmStorage filmStorage) {
+        this.filmStorage = filmStorage;
+    }
 
     public List<Film> getAllFilms() {
-        return films;
+        return filmStorage.getAllFilms();
     }
 
     public Film createFilm(Film film) {
         validateFilm(film);
-        film.setId(currentId++);
-        films.add(film);
-        log.info("Film created: {}", film);
-        return film;
+        Film createdFilm = filmStorage.createFilm(film);
+        log.info("Film created: {}", createdFilm);
+        return createdFilm;
     }
 
     public Film updateFilm(Film film) {
         validateFilm(film);
-        Optional<Film> existingFilm = films.stream().filter(f -> f.getId().equals(film.getId())).findFirst();
-        if (existingFilm.isPresent()) {
-            Film updatedFilm = existingFilm.get();
-            updatedFilm.setName(film.getName());
-            updatedFilm.setDescription(film.getDescription());
-            updatedFilm.setReleaseDate(film.getReleaseDate());
-            updatedFilm.setDuration(film.getDuration());
-            log.info("Film updated: {}", updatedFilm);
-            return updatedFilm;
-        } else {
-            log.error("Film not found with id: {}", film.getId());
-            throw new IllegalArgumentException("Film not found");
-        }
+        Film updatedFilm = filmStorage.updateFilm(film);
+        log.info("Film updated: {}", updatedFilm);
+        return updatedFilm;
     }
 
     private void validateFilm(Film film) {
