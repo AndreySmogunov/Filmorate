@@ -27,6 +27,14 @@ public class FilmService {
         return filmStorage.getAllFilms();
     }
 
+    public Film getFilmById(Long id) {
+        Film film = filmStorage.getFilmById(id);
+        if (film == null) {
+            throw new IllegalArgumentException("Film not found");
+        }
+        return film;
+    }
+
     public Film createFilm(Film film) {
         validateFilm(film);
         Film createdFilm = filmStorage.createFilm(film);

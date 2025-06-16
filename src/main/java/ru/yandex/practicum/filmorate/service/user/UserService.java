@@ -27,6 +27,14 @@ public class UserService {
         return userStorage.getAllUsers();
     }
 
+    public User getUserById(Long id) {
+        User user = userStorage.getUserById(id);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        return user;
+    }
+
     public User createUser(User user) {
         validateUser(user);
         User createdUser = userStorage.createUser(user);

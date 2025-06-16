@@ -5,6 +5,8 @@ import ru.yandex.practicum.filmorate.service.film.FilmService;
 import lombok.experimental.FieldDefaults;
 import lombok.AccessLevel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,6 +29,16 @@ public class FilmController {
         return filmService.getAllFilms();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Film> getFilmById(@PathVariable Long id) {
+        Film film = filmService.getFilmById(id);
+        if (film != null) {
+            return ResponseEntity.ok(film);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @PostMapping
     public Film createFilm(@Valid @RequestBody Film film) {
         return filmService.createFilm(film);
@@ -38,13 +50,15 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public void addLike(@PathVariable Long id, @PathVariable Long userId) {
+    public ResponseEntity<Void> addLike(@PathVariable Long id, @PathVariable Long userId) {
         filmService.addLike(id, userId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public void removeLike(@PathVariable Long id, @PathVariable Long userId) {
+    public ResponseEntity<Void> removeLike(@PathVariable Long id, @PathVariable Long userId) {
         filmService.removeLike(id, userId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/popular")
