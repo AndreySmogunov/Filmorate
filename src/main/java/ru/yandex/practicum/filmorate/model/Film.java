@@ -27,4 +27,9 @@ public class Film {
     int duration;
 
     Set<Long> likes = new HashSet<>();
+
+    Set<Genre> genres = new HashSet<>();
+
+    @NotNull(message = "Рейтинг MPA не может быть пустым")
+    MpaRating mpaRating;
 }

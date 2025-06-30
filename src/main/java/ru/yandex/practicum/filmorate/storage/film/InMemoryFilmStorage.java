@@ -34,6 +34,8 @@ public class InMemoryFilmStorage implements FilmStorage {
             updatedFilm.setDescription(film.getDescription());
             updatedFilm.setReleaseDate(film.getReleaseDate());
             updatedFilm.setDuration(film.getDuration());
+            updatedFilm.setGenres(film.getGenres());
+            updatedFilm.setMpaRating(film.getMpaRating());
             return updatedFilm;
         } else {
             throw new IllegalArgumentException("Film not found");

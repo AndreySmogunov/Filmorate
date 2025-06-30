@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.FriendshipStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class InMemoryUserStorage implements UserStorage {
             updatedUser.setLogin(user.getLogin());
             updatedUser.setName(user.getName());
             updatedUser.setBirthday(user.getBirthday());
+            updatedUser.setFriends(user.getFriends());
             return updatedUser;
         } else {
             throw new IllegalArgumentException("User not found");
@@ -55,8 +57,8 @@ public class InMemoryUserStorage implements UserStorage {
         User user = getUserById(userId);
         User friend = getUserById(friendId);
         if (user != null && friend != null) {
-            user.getFriends().add(friendId);
-            friend.getFriends().add(userId);
+            user.getFriends().put(friendId, FriendshipStatus.PENDING);
+            friend.getFriends().put(userId, FriendshipStatus.CONFIRMED);
         }
     }
 
@@ -74,7 +76,7 @@ public class InMemoryUserStorage implements UserStorage {
     public List<User> getFriends(Long userId) {
         User user = getUserById(userId);
         if (user != null) {
-            return user.getFriends().stream().map(this::getUserById).collect(Collectors.toList());
+            return user.getFriends().keySet().stream().map(this::getUserById).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
@@ -84,8 +86,8 @@ public class InMemoryUserStorage implements UserStorage {
         User user = getUserById(userId);
         User otherUser = getUserById(otherUserId);
         if (user != null && otherUser != null) {
-            return user.getFriends().stream()
-                    .filter(otherUser.getFriends()::contains)
+            return user.getFriends().keySet().stream()
+                    .filter(otherUser.getFriends().keySet()::contains)
                     .map(this::getUserById)
                     .collect(Collectors.toList());
         }

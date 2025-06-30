@@ -5,8 +5,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.AccessLevel;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -27,5 +27,5 @@ public class User {
     @NotNull(message = "Дата рождения не может быть пустой")
     LocalDate birthday;
 
-    Set<Long> friends = new HashSet<>();
+    Map<Long, FriendshipStatus> friends = new HashMap<>();
 }
