@@ -28,7 +28,10 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User updateUser(User user) {
-        Optional<User> existingUser = users.stream().filter(u -> u.getId().equals(user.getId())).findFirst();
+        Optional<User> existingUser = users.stream()
+                .filter(u -> u.getId().equals(user.getId()))
+                .findFirst();
+
         if (existingUser.isPresent()) {
             User updatedUser = existingUser.get();
             updatedUser.setEmail(user.getEmail());
@@ -49,7 +52,10 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User getUserById(Long id) {
-        return users.stream().filter(user -> user.getId().equals(id)).findFirst().orElse(null);
+        return users.stream()
+                .filter(user -> user.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -76,7 +82,9 @@ public class InMemoryUserStorage implements UserStorage {
     public List<User> getFriends(Long userId) {
         User user = getUserById(userId);
         if (user != null) {
-            return user.getFriends().keySet().stream().map(this::getUserById).collect(Collectors.toList());
+            return user.getFriends().keySet().stream()
+                    .map(this::getUserById)
+                    .collect(Collectors.toList());
         }
         return new ArrayList<>();
     }

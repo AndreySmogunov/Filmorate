@@ -1,21 +1,3 @@
-CREATE TABLE users (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    login VARCHAR(255) NOT NULL UNIQUE,
-    name VARCHAR(255),
-    birthday DATE NOT NULL
-);
-
-CREATE TABLE films (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description VARCHAR(200),
-    release_date DATE NOT NULL,
-    duration INT NOT NULL,
-    mpa_rating_id INT NOT NULL,
-    FOREIGN KEY (mpa_rating_id) REFERENCES mpa_ratings(id)
-);
-
 CREATE TABLE mpa_ratings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
@@ -40,6 +22,24 @@ INSERT INTO genres (name) VALUES
 ('Триллер'),
 ('Документальный'),
 ('Боевик');
+
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    login VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255),
+    birthday DATE NOT NULL
+);
+
+CREATE TABLE films (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(200),
+    release_date DATE NOT NULL,
+    duration INT NOT NULL,
+    mpa_rating_id INT NOT NULL,
+    FOREIGN KEY (mpa_rating_id) REFERENCES mpa_ratings(id)
+);
 
 CREATE TABLE film_genres (
     film_id BIGINT NOT NULL,

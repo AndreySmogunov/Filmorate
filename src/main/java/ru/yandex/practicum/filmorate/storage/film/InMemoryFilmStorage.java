@@ -27,7 +27,10 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film updateFilm(Film film) {
-        Optional<Film> existingFilm = films.stream().filter(f -> f.getId().equals(film.getId())).findFirst();
+        Optional<Film> existingFilm = films.stream()
+                .filter(f -> f.getId().equals(film.getId()))
+                .findFirst();
+
         if (existingFilm.isPresent()) {
             Film updatedFilm = existingFilm.get();
             updatedFilm.setName(film.getName());
@@ -49,7 +52,10 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film getFilmById(Long id) {
-        return films.stream().filter(film -> film.getId().equals(id)).findFirst().orElse(null);
+        return films.stream()
+                .filter(film -> film.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
