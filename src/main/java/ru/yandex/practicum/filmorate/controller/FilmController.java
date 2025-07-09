@@ -20,6 +20,8 @@ public class FilmController {
     final FilmService filmService;
     static final String FILM_ID_PATH = "/{id}";
     static final String LIKE_PATH = "/like/{userId}";
+    static final String UNLIKE_PATH = "/unlike/{userId}";
+    static final String POPULAR_PATH = "/popular";
 
     @Autowired
     public FilmController(FilmService filmService) {
@@ -57,13 +59,13 @@ public class FilmController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(FILM_ID_PATH + LIKE_PATH)
+    @DeleteMapping(FILM_ID_PATH + UNLIKE_PATH)
     public ResponseEntity<Void> removeLike(@PathVariable Long id, @PathVariable Long userId) {
         filmService.removeLike(id, userId);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/popular")
+    @GetMapping(POPULAR_PATH)
     public List<Film> getTopFilms(@RequestParam(defaultValue = "10") int count) {
         return filmService.getTopFilms(count);
     }

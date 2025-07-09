@@ -1,5 +1,8 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -25,6 +28,9 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Test
     public void testCreateUser_ValidUser() throws Exception {
         User user = new User();
@@ -35,33 +41,57 @@ public class UserControllerTest {
 
         when(userService.createUser(any(User.class))).thenReturn(user);
 
+        ObjectNode userJson = objectMapper.createObjectNode();
+        userJson.set("email", new TextNode("valid@example.com"));
+        userJson.set("login", new TextNode("validLogin"));
+        userJson.set("name", new TextNode("Valid Name"));
+        userJson.set("birthday", new TextNode("1990-01-01"));
+
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"valid@example.com\",\"login\":\"validLogin\",\"name\":\"Valid Name\",\"birthday\":\"1990-01-01\"}"))
+                        .content(userJson.toString()))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testCreateUser_InvalidUserEmail() throws Exception {
+        ObjectNode userJson = objectMapper.createObjectNode();
+        userJson.set("email", new TextNode("invalid-email"));
+        userJson.set("login", new TextNode("validLogin"));
+        userJson.set("name", new TextNode("Valid Name"));
+        userJson.set("birthday", new TextNode("1990-01-01"));
+
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"\",\"login\":\"validLogin\",\"name\":\"Valid Name\",\"birthday\":\"1990-01-01\"}"))
+                        .content(userJson.toString()))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void testCreateUser_InvalidUserLogin() throws Exception {
+        ObjectNode userJson = objectMapper.createObjectNode();
+        userJson.set("email", new TextNode("valid@example.com"));
+        userJson.set("login", new TextNode("invalid Login"));
+        userJson.set("name", new TextNode("Valid Name"));
+        userJson.set("birthday", new TextNode("1990-01-01"));
+
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"valid@example.com\",\"login\":\"invalid Login\",\"name\":\"Valid Name\",\"birthday\":\"1990-01-01\"}"))
+                        .content(userJson.toString()))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void testCreateUser_InvalidUserBirthday() throws Exception {
+        ObjectNode userJson = objectMapper.createObjectNode();
+        userJson.set("email", new TextNode("valid@example.com"));
+        userJson.set("login", new TextNode("validLogin"));
+        userJson.set("name", new TextNode("Valid Name"));
+        userJson.set("birthday", new TextNode("2025-01-01"));
+
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"valid@example.com\",\"login\":\"validLogin\",\"name\":\"Valid Name\",\"birthday\":\"2025-01-01\"}"))
+                        .content(userJson.toString()))
                 .andExpect(status().isBadRequest());
     }
 }

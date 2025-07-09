@@ -20,6 +20,7 @@ public class UserController {
     final UserService userService;
     static final String USER_ID_PATH = "/{id}";
     static final String FRIEND_PATH = "/friends/{friendId}";
+    static final String CONFIRM_FRIEND_PATH = "/friends/{friendId}/confirm";
     static final String COMMON_FRIENDS_PATH = "/friends/common/{otherId}";
 
     @Autowired
@@ -58,7 +59,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(USER_ID_PATH + FRIEND_PATH + "/confirm")
+    @PutMapping(USER_ID_PATH + CONFIRM_FRIEND_PATH)
     public ResponseEntity<Void> confirmFriend(@PathVariable Long id, @PathVariable Long friendId) {
         userService.confirmFriend(id, friendId);
         return ResponseEntity.ok().build();
