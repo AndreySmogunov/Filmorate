@@ -3,15 +3,19 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.AccessLevel;
-
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
+@Table(name = "users")
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @NotBlank(message = "Электронная почта не может быть пустой")
@@ -28,5 +32,11 @@ public class User {
     @NotNull(message = "Дата рождения не может быть пустой")
     LocalDate birthday;
 
-    Map<Long, FriendshipStatus> friends = new HashMap<>();
+    @ManyToMany
+    @JoinTable(
+            name = "friendships",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
+    Set<User> friends = new HashSet<>();
 }

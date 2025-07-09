@@ -1,29 +1,14 @@
-CREATE TABLE mpa_ratings (
+CREATE TABLE IF NOT EXISTS mpa_ratings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT INTO mpa_ratings (name) VALUES
-('G'),
-('PG'),
-('PG-13'),
-('R'),
-('NC-17');
-
-CREATE TABLE genres (
+CREATE TABLE IF NOT EXISTS genres (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT INTO genres (name) VALUES
-('Комедия'),
-('Драма'),
-('Мультфильм'),
-('Триллер'),
-('Документальный'),
-('Боевик');
-
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     login VARCHAR(255) NOT NULL UNIQUE,
@@ -31,7 +16,7 @@ CREATE TABLE users (
     birthday DATE NOT NULL
 );
 
-CREATE TABLE films (
+CREATE TABLE IF NOT EXISTS films (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description VARCHAR(200),
@@ -41,7 +26,7 @@ CREATE TABLE films (
     FOREIGN KEY (mpa_rating_id) REFERENCES mpa_ratings(id)
 );
 
-CREATE TABLE film_genres (
+CREATE TABLE IF NOT EXISTS film_genres (
     film_id BIGINT NOT NULL,
     genre_id INT NOT NULL,
     PRIMARY KEY (film_id, genre_id),
@@ -49,7 +34,7 @@ CREATE TABLE film_genres (
     FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE
 );
 
-CREATE TABLE film_likes (
+CREATE TABLE IF NOT EXISTS film_likes (
     film_id BIGINT NOT NULL,
     user_id BIGINT NOT NULL,
     PRIMARY KEY (film_id, user_id),
@@ -57,7 +42,7 @@ CREATE TABLE film_likes (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE friendships (
+CREATE TABLE IF NOT EXISTS friendships (
     user_id BIGINT NOT NULL,
     friend_id BIGINT NOT NULL,
     status VARCHAR(20) NOT NULL,

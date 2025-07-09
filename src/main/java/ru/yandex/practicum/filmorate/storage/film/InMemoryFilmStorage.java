@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,6 +14,11 @@ import java.util.stream.Collectors;
 public class InMemoryFilmStorage implements FilmStorage {
     private final List<Film> films = new ArrayList<>();
     private long currentId = 1;
+    private final UserStorage userStorage;
+
+    public InMemoryFilmStorage(UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
 
     @Override
     public List<Film> getAllFilms() {
@@ -27,18 +34,15 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film updateFilm(Film film) {
-        Optional<Film> existingFilm = films.stream()
-                .filter(f -> f.getId().equals(film.getId()))
-                .findFirst();
-
+        Optional<Film> existingFilm = films.stream().filter(f -> f.getId().equals(film.getId())).findFirst();
         if (existingFilm.isPresent()) {
             Film updatedFilm = existingFilm.get();
             updatedFilm.setName(film.getName());
             updatedFilm.setDescription(film.getDescription());
             updatedFilm.setReleaseDate(film.getReleaseDate());
             updatedFilm.setDuration(film.getDuration());
-            updatedFilm.setGenres(film.getGenres());
             updatedFilm.setMpaRating(film.getMpaRating());
+            updatedFilm.setGenres(film.getGenres());
             return updatedFilm;
         } else {
             throw new IllegalArgumentException("Film not found");
@@ -52,25 +56,24 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film getFilmById(Long id) {
-        return films.stream()
-                .filter(film -> film.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return films.stream().filter(film -> film.getId().equals(id)).findFirst().orElse(null);
     }
 
     @Override
     public void addLike(Long filmId, Long userId) {
         Film film = getFilmById(filmId);
-        if (film != null) {
-            film.getLikes().add(userId);
+        User user = userStorage.getUserById(userId);
+        if (film != null && user != null) {
+            film.getLikes().add(user);
         }
     }
 
     @Override
     public void removeLike(Long filmId, Long userId) {
         Film film = getFilmById(filmId);
-        if (film != null) {
-            film.getLikes().remove(userId);
+        User user = userStorage.getUserById(userId);
+        if (film != null && user != null) {
+            film.getLikes().remove(user);
         }
     }
 

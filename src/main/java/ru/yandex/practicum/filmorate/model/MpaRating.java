@@ -1,19 +1,45 @@
 package ru.yandex.practicum.filmorate.model;
 
-public enum MpaRating {
-    G("G"),
-    PG("PG"),
-    PG_13("PG-13"),
-    R("R"),
-    NC_17("NC-17");
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
+import lombok.AccessLevel;
+import javax.persistence.*;
 
-    private final String rating;
+@Entity
+@Table(name = "mpa_ratings")
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class MpaRating {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
 
-    MpaRating(String rating) {
-        this.rating = rating;
+    String name;
+
+    // Конструктор по умолчанию
+    public MpaRating() {}
+
+    // Конструктор с аргументами
+    public MpaRating(Integer id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public String getRating() {
-        return rating;
+    // Метод для получения рейтинга по ID
+    public static MpaRating getById(int id) {
+        switch (id) {
+            case 1:
+                return new MpaRating(1, "G");
+            case 2:
+                return new MpaRating(2, "PG");
+            case 3:
+                return new MpaRating(3, "PG-13");
+            case 4:
+                return new MpaRating(4, "R");
+            case 5:
+                return new MpaRating(5, "NC-17");
+            default:
+                throw new IllegalArgumentException("Invalid MPA rating ID: " + id);
+        }
     }
 }

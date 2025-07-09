@@ -1,20 +1,18 @@
 package ru.yandex.practicum.filmorate.model;
 
-public enum Genre {
-    COMEDY("Комедия"),
-    DRAMA("Драма"),
-    CARTOON("Мультфильм"),
-    THRILLER("Триллер"),
-    DOCUMENTARY("Документальный"),
-    ACTION("Боевик");
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
+import lombok.AccessLevel;
+import javax.persistence.*;
 
-    private final String name;
+@Entity
+@Table(name = "genres")
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Genre {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
 
-    Genre(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
+    String name;
 }
