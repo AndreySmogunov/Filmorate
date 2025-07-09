@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.storage.film;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,7 +18,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     private long currentId = 1;
     private final UserStorage userStorage;
 
-    public InMemoryFilmStorage(UserStorage userStorage) {
+    @Autowired
+    public InMemoryFilmStorage(@Qualifier("userDbStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 

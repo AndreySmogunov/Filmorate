@@ -1,13 +1,13 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
-import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.MpaRating;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.model.MpaRating;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Repository
-@Primary
+@Qualifier("filmDbStorage")
 public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
@@ -99,9 +99,8 @@ public class FilmDbStorage implements FilmStorage {
             film.setDescription(rs.getString("description"));
             film.setReleaseDate(rs.getDate("release_date").toLocalDate());
             film.setDuration(rs.getInt("duration"));
-            film.setMpaRating(MpaRating.getById(rs.getInt("mpa_rating_id"))); // ✅ Используем enum
+            film.setMpaRating(MpaRating.getById(rs.getInt("mpa_rating_id")));
             return film;
         }
     }
-
 }

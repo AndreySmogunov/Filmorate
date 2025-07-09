@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.experimental.FieldDefaults;
 import lombok.AccessLevel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ public class FilmService {
     final FilmStorage filmStorage;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage) {
+    public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage) {
         this.filmStorage = filmStorage;
     }
 
