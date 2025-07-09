@@ -68,7 +68,13 @@ public class UserDbStorage implements UserStorage {
     @Override
     public void addFriend(Long userId, Long friendId) {
         String sql = "INSERT INTO friendships (user_id, friend_id, status) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, userId, friendId, "FRIEND");
+        jdbcTemplate.update(sql, userId, friendId, "PENDING");
+    }
+
+    @Override
+    public void confirmFriend(Long userId, Long friendId) {
+        String sql = "UPDATE friendships SET status = 'CONFIRMED' WHERE user_id = ? AND friend_id = ?";
+        jdbcTemplate.update(sql, friendId, userId);
     }
 
     @Override
@@ -79,7 +85,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getFriends(Long userId) {
-        String sql = "SELECT u.* FROM users u JOIN friendships f ON u.id = f.friend_id WHERE f.user_id = ?";
+        String sql = "SELECT u.* FROM users u JOIN friendships f ON u.id = f.friend_id WHERE f.user_id = ? AND f.status = 'CONFIRMED'";
         return jdbcTemplate.query(sql, new UserRowMapper(), userId);
     }
 
@@ -88,7 +94,7 @@ public class UserDbStorage implements UserStorage {
         String sql = "SELECT u.* FROM users u " +
                 "JOIN friendships f1 ON u.id = f1.friend_id " +
                 "JOIN friendships f2 ON u.id = f2.friend_id " +
-                "WHERE f1.user_id = ? AND f2.user_id = ?";
+                "WHERE f1.user_id = ? AND f2.user_id = ? AND f1.status = 'CONFIRMED' AND f2.status = 'CONFIRMED'";
         return jdbcTemplate.query(sql, new UserRowMapper(), userId, otherUserId);
     }
 

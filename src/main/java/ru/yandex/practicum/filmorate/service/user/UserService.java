@@ -61,6 +61,12 @@ public class UserService {
         log.info("User {} added friend {}", userId, friendId);
     }
 
+    public void confirmFriend(Long userId, Long friendId) {
+        log.debug("User {} confirming friend {}", userId, friendId);
+        userStorage.confirmFriend(userId, friendId);
+        log.info("User {} confirmed friend {}", userId, friendId);
+    }
+
     public void removeFriend(Long userId, Long friendId) {
         log.debug("User {} removing friend {}", userId, friendId);
         userStorage.removeFriend(userId, friendId);

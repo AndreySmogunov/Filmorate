@@ -58,6 +58,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping(USER_ID_PATH + FRIEND_PATH + "/confirm")
+    public ResponseEntity<Void> confirmFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        userService.confirmFriend(id, friendId);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping(USER_ID_PATH + FRIEND_PATH)
     public ResponseEntity<Void> removeFriend(@PathVariable Long id, @PathVariable Long friendId) {
         userService.removeFriend(id, friendId);
