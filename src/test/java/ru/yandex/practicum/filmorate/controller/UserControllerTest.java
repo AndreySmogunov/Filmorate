@@ -32,7 +32,7 @@ public class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void testCreateUser_ValidUser() throws Exception {
+    public void testCreateUserValidUser() throws Exception {
         User user = new User();
         user.setEmail("valid@example.com");
         user.setLogin("validLogin");
@@ -54,7 +54,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testCreateUser_InvalidUserEmail() throws Exception {
+    public void testCreateUserInvalidUserEmail() throws Exception {
         ObjectNode userJson = objectMapper.createObjectNode();
         userJson.set("email", new TextNode("invalid-email"));
         userJson.set("login", new TextNode("validLogin"));
@@ -68,7 +68,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testCreateUser_InvalidUserLogin() throws Exception {
+    public void testCreateUserInvalidUserLogin() throws Exception {
         ObjectNode userJson = objectMapper.createObjectNode();
         userJson.set("email", new TextNode("valid@example.com"));
         userJson.set("login", new TextNode("invalid Login"));
@@ -82,7 +82,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testCreateUser_InvalidUserBirthday() throws Exception {
+    public void testCreateUserInvalidUserBirthday() throws Exception {
         ObjectNode userJson = objectMapper.createObjectNode();
         userJson.set("email", new TextNode("valid@example.com"));
         userJson.set("login", new TextNode("validLogin"));

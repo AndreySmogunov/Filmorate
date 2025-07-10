@@ -33,7 +33,7 @@ public class FilmControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    public void testCreateFilm_ValidFilm() throws Exception {
+    public void testCreateFilmValidFilm() throws Exception {
         Film film = new Film();
         film.setName("Valid Film");
         film.setDescription("This is a valid film description.");
@@ -59,7 +59,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void testCreateFilm_InvalidFilmName() throws Exception {
+    public void testCreateFilmInvalidFilmName() throws Exception {
         ObjectNode filmJson = objectMapper.createObjectNode();
         filmJson.set("name", new TextNode(""));
         filmJson.set("description", new TextNode("This is a valid film description."));
@@ -76,7 +76,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void testCreateFilm_InvalidFilmReleaseDate() throws Exception {
+    public void testCreateFilmInvalidFilmReleaseDate() throws Exception {
         ObjectNode filmJson = objectMapper.createObjectNode();
         filmJson.set("name", new TextNode("Valid Film"));
         filmJson.set("description", new TextNode("This is a valid film description."));
@@ -93,7 +93,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void testCreateFilm_InvalidFilmDuration() throws Exception {
+    public void testCreateFilmInvalidFilmDuration() throws Exception {
         ObjectNode filmJson = objectMapper.createObjectNode();
         filmJson.set("name", new TextNode("Valid Film"));
         filmJson.set("description", new TextNode("This is a valid film description."));
