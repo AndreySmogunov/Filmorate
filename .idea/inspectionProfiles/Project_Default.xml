@@ -7,15 +7,21 @@
       <option name="ignoredModules">
         <list>
           <option value="Filmorate" />
+          <option value="Filmorate" />
+          <option value="Filmorate" />
         </list>
       </option>
       <option name="ignoredPackages">
         <list>
           <option value="ch.qos.logback:logback-classic:1.4.7" />
+          <option value="org.hibernate.validator:hibernate-validator:6.1.5.Final" />
+          <option value="com.jayway.jsonpath:json-path:2.8.0" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
         </list>
       </option>
